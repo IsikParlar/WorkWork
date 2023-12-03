@@ -28,8 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.workwork.R
 import com.example.workwork.domain.model.Session
 
-
-fun LazyListScope.studySessionList(
+fun LazyListScope.studySessionsList(
     sectionTitle: String,
     emptyListText: String,
     sessions: List<Session>,
@@ -49,9 +48,8 @@ fun LazyListScope.studySessionList(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    modifier = Modifier
-                        .size(120.dp),
-                    painter = painterResource(id = R.drawable.img_lamp),
+                    modifier = Modifier.size(120.dp),
+                    painter = painterResource(R.drawable.img_lamp),
                     contentDescription = emptyListText
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -64,11 +62,11 @@ fun LazyListScope.studySessionList(
             }
         }
     }
-    items(sessions){session->
+    items(sessions) { session ->
         StudySessionCard(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
             session = session,
-            onDeleteIconClick = {onDeleteIconClick(session)}
+            onDeleteIconClick = { onDeleteIconClick(session) }
         )
     }
 }
@@ -93,9 +91,8 @@ private fun StudySessionCard(
                     text = session.relatedToSubject,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleMedium
                 )
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${session.date}",
                     style = MaterialTheme.typography.bodySmall
@@ -104,9 +101,9 @@ private fun StudySessionCard(
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${session.duration} hr",
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.titleMedium
             )
-            IconButton(onClick =  onDeleteIconClick) {
+            IconButton(onClick = onDeleteIconClick) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete Session"
