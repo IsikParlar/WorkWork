@@ -40,18 +40,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.workwork.R
-import com.example.workwork.domain.model.Session
 import com.example.workwork.domain.model.Subject
-import com.example.workwork.domain.model.Task
 import com.example.workwork.presentation.components.AddSubjectDialog
 import com.example.workwork.presentation.components.CountCard
 import com.example.workwork.presentation.components.DeleteDialog
 import com.example.workwork.presentation.components.SubjectCard
 import com.example.workwork.presentation.components.studySessionsList
 import com.example.workwork.presentation.components.tasksList
+import com.example.workwork.presentation.destinations.SessionScreenRouteDestination
+import com.example.workwork.presentation.destinations.SubjectScreenRouteDestination
+import com.example.workwork.presentation.destinations.TaskScreenRouteDestination
+import com.example.workwork.presentation.subject.SubjectScreenNavArgs
+import com.example.workwork.presentation.task.TaskScreenNavArgs
+import com.example.workwork.sessions
+import com.example.workwork.subjects
+import com.example.workwork.tasks
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+
+//Navigation Logic
+@Destination(start = true)
+@Composable
+fun DashboardScreenRoute(
+    navigator: DestinationsNavigator
+) {
+    DashboardScreen(
+        onSubjectCardClick = { subjectId ->
+            subjectId?.let {
+                val navArg = SubjectScreenNavArgs(subjectId = subjectId)
+                navigator.navigate(SubjectScreenRouteDestination(navArgs = navArg))
+            }
+        },
+        onTaskCardClick = { taskId ->
+            val navArg = TaskScreenNavArgs(taskId = taskId, subjectId = null)
+            navigator.navigate(TaskScreenRouteDestination(navArgs = navArg))
+        },
+        onStartSessionButtonClick = {
+            navigator.navigate(SessionScreenRouteDestination())
+        }
+    )
+}
 
 @Composable
-fun DashboardScreen() {
+private fun DashboardScreen(
+    onSubjectCardClick: (Int?) -> Unit,
+    onTaskCardClick: (Int?) -> Unit,
+    onStartSessionButtonClick: () -> Unit
+) {
 
     var isAddSubjectDialogOpen by rememberSaveable { mutableStateOf(false) }
     var isDeleteSessionDialogOpen by rememberSaveable { mutableStateOf(false) }
@@ -59,130 +95,6 @@ fun DashboardScreen() {
     var subjectName by remember { mutableStateOf("") }
     var goalHours by remember { mutableStateOf("") }
     var selectedColor by remember { mutableStateOf(Subject.subjectCardColors.random()) }
-
-    val subjects = listOf(
-        Subject(
-            name = "English",
-            goalHours = 10f,
-            colors = Subject.subjectCardColors[0],
-            subjectId = 0
-        ),
-        Subject(
-            name = "Physics",
-            goalHours = 10f,
-            colors = Subject.subjectCardColors[1],
-            subjectId = 0
-        ),
-        Subject(
-            name = "Maths",
-            goalHours = 10f,
-            colors = Subject.subjectCardColors[2],
-            subjectId = 0
-        ),
-        Subject(
-            name = "Geology",
-            goalHours = 10f,
-            colors = Subject.subjectCardColors[3],
-            subjectId = 0
-        ),
-        Subject(
-            name = "Fine Arts",
-            goalHours = 10f,
-            colors = Subject.subjectCardColors[4],
-            subjectId = 0
-        )
-    )
-
-    val tasks = listOf(
-        Task(
-            title = "Prepare notes",
-            description = "",
-            dueDate = 0L,
-            priority = 0,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Do Homework",
-            description = "",
-            dueDate = 0L,
-            priority = 1,
-            relatedToSubject = "",
-            isComplete = true,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Go Coaching",
-            description = "",
-            dueDate = 0L,
-            priority = 2,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Assignment",
-            description = "",
-            dueDate = 0L,
-            priority = 1,
-            relatedToSubject = "",
-            isComplete = false,
-            taskSubjectId = 0,
-            taskId = 1
-        ),
-        Task(
-            title = "Write Poem",
-            description = "",
-            dueDate = 0L,
-            priority = 0,
-            relatedToSubject = "",
-            isComplete = true,
-            taskSubjectId = 0,
-            taskId = 1
-        )
-    )
-
-    val sessions = listOf(
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "Physics",
-            date = 0L,
-            duration = 2,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "Maths",
-            date = 0L,
-            duration = 2,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2,
-            sessionSubjectId = 0,
-            sessionId = 0
-        ),
-        Session(
-            relatedToSubject = "English",
-            date = 0L,
-            duration = 2,
-            sessionSubjectId = 0,
-            sessionId = 0
-        )
-    )
 
     AddSubjectDialog(
         isOpen = isAddSubjectDialogOpen,
@@ -229,12 +141,13 @@ fun DashboardScreen() {
                 SubjectCardsSection(
                     modifier = Modifier.fillMaxWidth(),
                     subjectList = subjects,
-                    onAddIconClicked = { isAddSubjectDialogOpen = true }
+                    onAddIconClicked = { isAddSubjectDialogOpen = true },
+                    onSubjectCardClick = onSubjectCardClick
                 )
             }
             item {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = onStartSessionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 48.dp, vertical = 20.dp)
@@ -248,7 +161,7 @@ fun DashboardScreen() {
                         "Click the + button in subject screen to add new task.",
                 tasks = tasks,
                 onCheckBoxClick = {},
-                onTaskCardClick = {}
+                onTaskCardClick = onTaskCardClick
             )
             item {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -310,7 +223,8 @@ private fun SubjectCardsSection(
     modifier: Modifier,
     subjectList: List<Subject>,
     emptyListText: String = "You don't have any subjects.\n Click the + button to add new subject.",
-    onAddIconClicked: () -> Unit
+    onAddIconClicked: () -> Unit,
+    onSubjectCardClick: (Int?) -> Unit
 ) {
     Column(modifier = modifier) {
         Row(
@@ -354,7 +268,7 @@ private fun SubjectCardsSection(
                 SubjectCard(
                     subjectName = subject.name,
                     gradientColors = subject.colors,
-                    onClick = {}
+                    onClick = { onSubjectCardClick(subject.subjectId) }
                 )
             }
         }
