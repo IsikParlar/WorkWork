@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workwork.presentation.components.DeleteDialog
 import com.example.workwork.presentation.components.SubjectListBottomSheet
 import com.example.workwork.presentation.components.studySessionsList
@@ -49,6 +50,8 @@ import kotlinx.coroutines.launch
 fun SessionScreenRoute(
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SessionViewModelViewModel = hiltViewModel()
+
     SessionScreen(
         onBackButtonClick = {navigator.navigateUp()}
     )

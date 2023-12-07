@@ -9,8 +9,10 @@ import com.example.workwork.domain.model.Task
 import com.example.workwork.presentation.NavGraphs
 import com.example.workwork.presentation.theme.WorkWorkTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
