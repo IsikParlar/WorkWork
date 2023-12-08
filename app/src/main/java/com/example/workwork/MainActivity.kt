@@ -3,6 +3,7 @@ package com.example.workwork
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.graphics.toArgb
 import com.example.workwork.domain.model.Session
 import com.example.workwork.domain.model.Subject
 import com.example.workwork.domain.model.Task
@@ -28,31 +29,31 @@ class MainActivity : ComponentActivity() {
      Subject(
          name = "English",
          goalHours = 10f,
-         colors = Subject.subjectCardColors[0],
+         colors = Subject.subjectCardColors[0].map {it.toArgb()},
          subjectId = 0
      ),
      Subject(
          name = "Physics",
          goalHours = 10f,
-         colors = Subject.subjectCardColors[1],
+         colors = Subject.subjectCardColors[0].map {it.toArgb()},
          subjectId = 0
      ),
      Subject(
          name = "Maths",
          goalHours = 10f,
-         colors = Subject.subjectCardColors[2],
+         colors = Subject.subjectCardColors[0].map {it.toArgb()},
          subjectId = 0
      ),
      Subject(
          name = "Geology",
          goalHours = 10f,
-         colors = Subject.subjectCardColors[3],
+         colors = Subject.subjectCardColors[0].map {it.toArgb()},
          subjectId = 0
      ),
      Subject(
          name = "Fine Arts",
          goalHours = 10f,
-         colors = Subject.subjectCardColors[4],
+         colors = Subject.subjectCardColors[0].map {it.toArgb()},
          subjectId = 0
      )
  )
